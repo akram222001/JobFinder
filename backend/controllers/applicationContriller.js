@@ -23,6 +23,7 @@ export const employerGetAllApplications = catchAsyncError(async(req, res, next) 
     })
   })
 
+  
 export const jobFinderGetAllApplications = catchAsyncError(async(req, res, next) =>{
     const { role } = req.user;
     if (role === "Employer") {
@@ -32,16 +33,35 @@ export const jobFinderGetAllApplications = catchAsyncError(async(req, res, next)
         )
       );
     }
-
     const {_id} = req.user;
     const applications = await Application.find({'applicantID.user': _id});
     res.status(200).json({
       success: true,
-      applications,
+      applications
     });
   }
 );
 
+// export const jobFinderDeleteApplications = catchAsyncError(
+//   async (req, res, next) => {
+//     const { role } = req.user;
+//     if (role === "Employer") {
+//       return next(
+//         new ErrorHandler("Employer is not allowed to access this resource", 400)
+//       );
+//     }
+//     conct = { id } = req.params;
+//     const application = await Application.findById(id);
+//     if (!application) {
+//       return next(new ErrorHandler("Oops, application not found!", 404));
+//     }
+//     await application.deleteOne();
+//     res.status(200).json({
+//       success: true,
+//       messsage: "Application Deleted Successfully",
+//     });
+//   }
+// );
 
 export const jobFinderDeleteApplications = catchAsyncError(
   async (req, res, next) => {
@@ -51,7 +71,7 @@ export const jobFinderDeleteApplications = catchAsyncError(
         new ErrorHandler("Employer is not allowed to access this resource", 400)
       );
     }
-    conct = { id } = req.params;
+    const { id } = req.params; // Corrected variable declaration
     const application = await Application.findById(id);
     if (!application) {
       return next(new ErrorHandler("Oops, application not found!", 404));
@@ -59,7 +79,7 @@ export const jobFinderDeleteApplications = catchAsyncError(
     await application.deleteOne();
     res.status(200).json({
       success: true,
-      messsage: "Application Deleted Successfully",
+      message: "Application Deleted Successfully", // Corrected typo in "message"
     });
   }
 );
